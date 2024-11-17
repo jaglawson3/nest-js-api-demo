@@ -4,7 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "../prisma/prisma.service";
 import { AuthDto } from "./dto";
 import * as argon from "argon2";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -28,7 +28,7 @@ export class AuthService {
       // return the saved user
       return this.signToken(user.id, user.email);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           throw new ForbiddenException("Email already exists");
         }
